@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  enapp_api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: enapp_api
+    image: enapp_api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./..:/usr/src/app
+    networks:
+      - enapp_net
+
+  enapp_nginx:
+    image: nginx:1.21
+    container_name: enapp_nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx/enapp.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+      - "4343:443"
+    networks:
+      - enapp_net
+
+  enapp_postgres:
+    image: postgres:13.4
+    restart: unless-stopped
+    container_name: enapp_postgres
+    volumes:
+      - ./../data/postgres/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    networks:
+      - enapp_net
+
+  enapp_rabbit:
+    image: rabbitmq:3.9-management
+    container_name: enapp_rabbit
+    volumes:
+      - ./../data/rabbit/:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - enapp_net
+
+networks:
+  enapp_net:
+    driver: bridge

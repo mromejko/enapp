@@ -1,0 +1,4 @@
+.env
+data
+docker/api/requirements.txt
+.idea
