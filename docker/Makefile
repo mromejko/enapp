@@ -18,4 +18,8 @@ logs:
 	docker-compose logs -f
 
 seed:
-	docker exec -it enapp_api bash -c 'flask db migrate && flask db upgrade'
+	make clean
+	docker exec -it enapp_api bash -c 'flask db migrate && flask db upgrade && flask seeder'
+
+clean:
+	rm -rf ./../migrations/versions/*
