@@ -24,6 +24,16 @@ make seed
 
 Uzupełni bazę danych przykładowymi danymi.
 
+Jak wyświetlić logi ze wszystkich kontenerów:
+
+```
+make logs
+```
+
+---
+
+### Aplikacja
+
 Aplikacja będzie dostępna pod adresem:
 ```
 http://0.0.0.0:8080/v1
